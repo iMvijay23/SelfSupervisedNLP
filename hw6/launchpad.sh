@@ -22,4 +22,4 @@ pip install -r requirements.txt # install Python dependencies
 
 export TOKENIZERS_PARALLELISM=false
 # runs your code
-srun python classification.py  --experiment "overfit" --device cuda --model "distilbert-base-uncased" --batch_size "16" --lr 1e-4 --num_epochs 30 --small_subset
+srun python classification51.py  --experiment "overfit" --device cuda --model "distilbert-base-uncased" --batch_size "64" --lr 1e-4 --num_epochs 20 --small_subset 
