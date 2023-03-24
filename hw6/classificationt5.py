@@ -226,7 +226,7 @@ def train(mymodel, num_epochs, train_dataloader, validation_dataloader, device, 
             output = mymodel(input_ids=input_ids, attention_mask=attention_mask, labels=label_input_ids, decoder_attention_mask = label_attention_mask )
             loss,predictions=output[:2]
             #predictions = output.logits
-            #model_loss = loss(prediction_scores.view(-1,2).to(device), batch['labels'].view(-1).to(device))
+            
             loss.backward()
             optimizer.step()
             lr_scheduler.step()
@@ -237,14 +237,7 @@ def train(mymodel, num_epochs, train_dataloader, validation_dataloader, device, 
             #print('prediction after argmax',predictions.size())
             predictions = torch.argmax(predictions, dim=1)
             #print('prediction after argmax',predictions.size())
-            #decoded_preds = [print(ids) or t5tokenizer.decode(ids, skip_special_tokens=True) for ids in output]
-            #decoded_labels = [print(ids) or t5tokenizer.decode(ids, skip_special_tokens=True) for ids in batch['labels']]
 
-            # update metrics
-            #print('labels size',labels.size())
-            #eval_accuracy += torch.sum(predictions == labels).item()
-            
-            #train_accuracy.add_batch(decoded_preds,decoded_labels)
             train_accuracy.add_batch(predictions=predictions, references=batch['labels'])
 
         # print evaluation metrics
@@ -307,8 +300,6 @@ def pre_process(model_name, batch_size, device, dataset,small_subset=False):
     # maximum length of the input; any input longer than this will be truncated
     # we had to do some pre-processing on the data to figure what is the length of most instances in the dataset
     max_len = 128 #128 before changed for t5
-    #config = T5Config.from_pretrained(model_name)
-    #config.max_length = max_len
 
     print("Loading the tokenizer...")
     mytokenizer = T5Tokenizer.from_pretrained('t5-small')
